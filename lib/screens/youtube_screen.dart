@@ -10,7 +10,7 @@ class YoutubeScreen extends StatefulWidget {
 }
 
 class _YoutubeScreenState extends State<YoutubeScreen> {
-  List<Channel> list_channel;
+  List<Channel>? list_channel;
   Icon customIcon = const Icon(Icons.search);
   Widget customSearchBar = const Text('Youtube Channel');
   @override
@@ -34,8 +34,7 @@ class _YoutubeScreenState extends State<YoutubeScreen> {
     ];
     List<Channel> allChanels = [];
     for (String channel_id in list_channel_id) {
-      Channel channel =
-          await APIService.instance.fetchChannel(channelId: channel_id);
+      Channel channel = await APIService.instance.fetchChannel(channel_id);
       allChanels.add(channel);
     }
     setState(() {
@@ -45,8 +44,8 @@ class _YoutubeScreenState extends State<YoutubeScreen> {
 
   _buildProfileInfo(Channel channel) {
     return GestureDetector(
-      onTap: () => Navigator.push(context,
-          MaterialPageRoute(builder: (_) => ChannelScreen(channel: channel))),
+      onTap: () => Navigator.push(
+          context, MaterialPageRoute(builder: (_) => ChannelScreen(channel))),
       child: Container(
         margin: EdgeInsets.all(20.0),
         padding: EdgeInsets.all(20.0),
@@ -136,8 +135,7 @@ class _YoutubeScreenState extends State<YoutubeScreen> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (_) =>
-                                    SearchScreen(searchString: value),
+                                builder: (_) => SearchScreen(value),
                               ));
                         },
                       ),
@@ -154,9 +152,9 @@ class _YoutubeScreenState extends State<YoutubeScreen> {
       body: list_channel != null
           ? NotificationListener<ScrollNotification>(
               child: ListView.builder(
-                  itemCount: list_channel.length,
+                  itemCount: list_channel?.length,
                   itemBuilder: (BuildContext context, int index) {
-                    Channel channel = list_channel[index];
+                    Channel channel = list_channel![index];
                     return _buildProfileInfo(channel);
                   }))
           : Center(

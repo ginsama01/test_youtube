@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:test_youtube/models/channel_model.dart';
 import 'package:test_youtube/models/video_model.dart';
 import 'package:test_youtube/screens/video_screen.dart';
 import 'package:test_youtube/services/api_service.dart';
 
 class SearchScreen extends StatefulWidget {
   final String searchString;
-  SearchScreen({this.searchString});
+  SearchScreen(this.searchString);
   @override
   _SearchScreenState createState() => _SearchScreenState();
 }
 
 class _SearchScreenState extends State<SearchScreen> {
-  List<Video> videos;
+  List<Video>? videos;
 
   @override
   void initState() {
@@ -21,8 +20,8 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   _initVideos() async {
-    List<Video> tmp_videos = await APIService.instance
-        .fetchVideosFromSearching(searchString: widget.searchString);
+    List<Video> tmp_videos =
+        await APIService.instance.fetchVideosFromSearching(widget.searchString);
     setState(() {
       videos = tmp_videos;
     });
@@ -33,7 +32,7 @@ class _SearchScreenState extends State<SearchScreen> {
       onTap: () => Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (_) => VideoScreen(id: video.id),
+          builder: (_) => VideoScreen(video.id),
         ),
       ),
       child: Container(
@@ -81,9 +80,9 @@ class _SearchScreenState extends State<SearchScreen> {
       body: videos != null
           ? NotificationListener<ScrollNotification>(
               child: ListView.builder(
-                itemCount: videos.length,
+                itemCount: videos?.length,
                 itemBuilder: (BuildContext context, int index) {
-                  Video video = videos[index];
+                  Video video = videos![index];
                   return _buildVideo(video);
                 },
               ),

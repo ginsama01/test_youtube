@@ -6,13 +6,13 @@ import 'package:test_youtube/services/api_service.dart';
 
 class ChannelScreen extends StatefulWidget {
   final Channel channel;
-  ChannelScreen({this.channel});
+  ChannelScreen(this.channel);
   @override
   _ChannelScreenState createState() => _ChannelScreenState();
 }
 
 class _ChannelScreenState extends State<ChannelScreen> {
-  Channel _channel;
+  Channel? _channel;
   bool _isLoading = false;
 
   @override
@@ -47,7 +47,7 @@ class _ChannelScreenState extends State<ChannelScreen> {
           CircleAvatar(
             backgroundColor: Colors.white,
             radius: 35.0,
-            backgroundImage: NetworkImage(_channel.profilePictureUrl),
+            backgroundImage: NetworkImage(_channel!.profilePictureUrl),
           ),
           SizedBox(width: 12.0),
           Expanded(
@@ -56,7 +56,7 @@ class _ChannelScreenState extends State<ChannelScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
-                  _channel.title,
+                  _channel!.title,
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: 20.0,
@@ -65,7 +65,7 @@ class _ChannelScreenState extends State<ChannelScreen> {
                   overflow: TextOverflow.ellipsis,
                 ),
                 Text(
-                  '${_channel.subscriberCount} subscribers',
+                  '${_channel!.subscriberCount} subscribers',
                   style: TextStyle(
                     color: Colors.grey[600],
                     fontSize: 16.0,
@@ -86,7 +86,7 @@ class _ChannelScreenState extends State<ChannelScreen> {
       onTap: () => Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (_) => VideoScreen(id: video.id),
+          builder: (_) => VideoScreen(video.id),
         ),
       ),
       child: Container(
@@ -128,10 +128,10 @@ class _ChannelScreenState extends State<ChannelScreen> {
   _loadMoreVideos() async {
     _isLoading = true;
     List<Video> moreVideos = await APIService.instance
-        .fetchVideosFromPlaylist(playlistId: _channel.uploadPlaylistId);
-    List<Video> allVideos = _channel.videos..addAll(moreVideos);
+        .fetchVideosFromPlaylist(_channel!.uploadPlaylistId);
+    List<Video> allVideos = _channel!.videos!..addAll(moreVideos);
     setState(() {
-      _channel.videos = allVideos;
+      _channel!.videos = allVideos;
     });
     _isLoading = false;
   }
@@ -146,7 +146,8 @@ class _ChannelScreenState extends State<ChannelScreen> {
           ? NotificationListener<ScrollNotification>(
               onNotification: (ScrollNotification scrollDetails) {
                 if (!_isLoading &&
-                    _channel.videos.length != int.parse(_channel.videoCount) &&
+                    _channel!.videos!.length !=
+                        int.parse(_channel!.videoCount) &&
                     scrollDetails.metrics.pixels ==
                         scrollDetails.metrics.maxScrollExtent) {
                   _loadMoreVideos();
@@ -154,12 +155,12 @@ class _ChannelScreenState extends State<ChannelScreen> {
                 return false;
               },
               child: ListView.builder(
-                itemCount: 1 + _channel.videos.length,
+                itemCount: 1 + _channel!.videos!.length,
                 itemBuilder: (BuildContext context, int index) {
                   if (index == 0) {
                     return _buildProfileInfo();
                   }
-                  Video video = _channel.videos[index - 1];
+                  Video video = _channel!.videos![index - 1];
                   return _buildVideo(video);
                 },
               ),

@@ -13,7 +13,7 @@ class APIService {
   final String _baseUrl = 'www.googleapis.com';
   String _nextPageToken = '';
 
-  Future<Channel> fetchChannel({String channelId}) async {
+  Future<Channel> fetchChannel(String channelId) async {
     Map<String, String> parameters = {
       'part': 'snippet, contentDetails, statistics',
       'id': channelId,
@@ -35,16 +35,14 @@ class APIService {
       Channel channel = Channel.fromMap(data);
 
       // Fetch first batch of videos from uploads playlist
-      channel.videos = await fetchVideosFromPlaylist(
-        playlistId: channel.uploadPlaylistId,
-      );
+      channel.videos = await fetchVideosFromPlaylist(channel.uploadPlaylistId);
       return channel;
     } else {
       throw json.decode(response.body)['error']['message'];
     }
   }
 
-  Future<List<Video>> fetchVideosFromPlaylist({String playlistId}) async {
+  Future<List<Video>> fetchVideosFromPlaylist(String playlistId) async {
     Map<String, String> parameters = {
       'part': 'snippet',
       'playlistId': playlistId,
@@ -82,7 +80,7 @@ class APIService {
     }
   }
 
-  Future<List<Video>> fetchVideosFromSearching({String searchString}) async {
+  Future<List<Video>> fetchVideosFromSearching(String searchString) async {
     Map<String, String> parameters = {
       'part': 'snippet',
       'maxResults': '25',

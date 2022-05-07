@@ -4,29 +4,29 @@ class Video {
   final String thumbnailUrl;
   final String channelTitle;
 
-  Video({
+  Video(
     this.id,
     this.title,
     this.thumbnailUrl,
     this.channelTitle,
-  });
+  );
 
   factory Video.fromMap(Map<String, dynamic> snippet) {
     return Video(
-      id: snippet['resourceId']['videoId'],
-      title: snippet['title'],
-      thumbnailUrl: snippet['thumbnails']['high']['url'],
-      channelTitle: snippet['channelTitle'],
+      snippet['resourceId']['videoId'],
+      snippet['title'],
+      snippet['thumbnails']['high']['url'],
+      snippet['channelTitle'],
     );
   }
 
   factory Video.fromMapSearch(
       Map<String, dynamic> snippet, Map<String, dynamic> id) {
     return Video(
-      id: id['videoId'],
-      title: snippet['title'],
-      thumbnailUrl: snippet['thumbnails']['high']['url'],
-      channelTitle: snippet['channelTitle'],
+      id['videoId'],
+      snippet['title'],
+      snippet['thumbnails']['high']['url'],
+      snippet['channelTitle'],
     );
   }
 }

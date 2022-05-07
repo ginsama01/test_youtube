@@ -6,14 +6,14 @@ import 'package:flutter/gestures.dart';
 class VideoScreen extends StatefulWidget {
   final String id;
 
-  VideoScreen({this.id});
+  VideoScreen(this.id);
 
   @override
   _VideoScreenState createState() => _VideoScreenState();
 }
 
 class _VideoScreenState extends State<VideoScreen> {
-  YoutubePlayerController _controller;
+  late YoutubePlayerController _controller;
   String subString = """1
 00:00:03,400 --> 00:00:06,177
 In this lesson, we're going to be talking about finance. And
@@ -105,10 +105,10 @@ more money, leave the money in the account for a longer period of time, or
 23
 00:01:46,860 --> 00:01:49,970
 find an institution that will pay me a higher interest rate.""";
-  List<Subtitle> subtitles;
-  List<String> currentSubtitles;
-  List<String> previousSubtitles;
-  List<String> nextSubtitles;
+  List<Subtitle>? subtitles;
+  List<String>? currentSubtitles;
+  List<String>? previousSubtitles;
+  List<String>? nextSubtitles;
 
   @override
   void initState() {
@@ -146,10 +146,10 @@ find an institution that will pay me a higher interest rate.""";
     List<String> tmpCurrentSub = [];
     List<String> tmpPreviousSub = [];
     List<String> tmpNextSub = [];
-    String currentStr;
-    String previousStr;
-    String nextStr;
-    for (Subtitle subtitle in subtitles) {
+    String? currentStr;
+    String? previousStr;
+    String? nextStr;
+    for (Subtitle subtitle in subtitles!) {
       var cmp1 = pos.compareTo(subtitle.start);
       var cmp2 = pos.compareTo(subtitle.end);
       if (cmp1 < 0) {
@@ -182,7 +182,7 @@ find an institution that will pay me a higher interest rate.""";
             child: RichText(
           text: TextSpan(
               style: defaultStyle,
-              children: currentSubtitles.map((subtitle) {
+              children: currentSubtitles!.map((subtitle) {
                 return TextSpan(
                     text: subtitle + " ",
                     style: linkStyle,
